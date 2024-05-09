@@ -38,15 +38,18 @@ setupIonicReact();
 
 const App: React.FC = () => (
   <IonApp>
+    {/* This is the Ionic React Router component that wraps the entire app */}
     <IonReactRouter>
       <IonRouterOutlet>
         <Route path="/" exact={true}>
           <Redirect to="/inbox" />
         </Route>
         <Route path="/inbox" exact={true}>
+          {/* Inbox page to view all emails */}
           <Inbox />
         </Route>
         <Route path="/mail/:id">
+          {/* Mail page to view a single email */}
           <ViewMail />
         </Route>
       </IonRouterOutlet>

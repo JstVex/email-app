@@ -20,16 +20,16 @@ import './Inbox.css';
 import { arrowBack, searchOutline } from 'ionicons/icons';
 
 const Inbox: React.FC = () => {
-    const [emails, setEmails] = useState<Email[]>([]);
-    const [allEmails, setAllEmails] = useState<Email[]>([]);
-    const [searchText, setSearchText] = useState('');
-    const [showSearch, setShowSearch] = useState(false);
+    const [emails, setEmails] = useState<Email[]>([]); // State to hold our emails
+    const [allEmails, setAllEmails] = useState<Email[]>([]); // State to hold all emails ( used for filtering in search )
+    const [searchText, setSearchText] = useState(''); // State to hold the search text
+    const [showSearch, setShowSearch] = useState(false); // State to toggle the search bar
 
     useIonViewWillEnter(() => {
         const mails = getEmails();
         setAllEmails(mails);
         setEmails(mails);
-    });
+    }); // This hook will run when the component is mounted
 
     useEffect(() => {
         if (searchText.trim() === '') {
@@ -42,25 +42,26 @@ const Inbox: React.FC = () => {
             });
             setEmails(filteredEmails);
         }
-    }, [searchText, allEmails]);
+    }, [searchText, allEmails]); // This hook will run when the searchText or allEmails state changes
 
     const refresh = (e: CustomEvent) => {
         setTimeout(() => {
             e.detail.complete();
         }, 3000);
-    };
+    }; // This function will run when the user pulls down to refresh the page
 
     const handleSearchToggle = () => {
         setShowSearch(!showSearch);
         if (showSearch) {
             setSearchText('');
         }
-    };
+    }; // This function will toggle the search bar
 
     return (
         <IonPage id="home-page">
             <IonHeader>
                 <IonToolbar>
+                    {/*if showSearch is true, show the search bar, else show title and icon to toggle search*/}
                     {showSearch ? (
                         <>
                             <IonButtons slot="start">
@@ -100,6 +101,7 @@ const Inbox: React.FC = () => {
                     </IonToolbar>
                 </IonHeader>
 
+                {/* Our list of emails ( each email is an EmailList component  */}
                 <IonList>
                     {emails.map(email => <EmailList key={email.id} email={email} />)}
                 </IonList>

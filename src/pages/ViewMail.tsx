@@ -18,13 +18,13 @@ import { useParams } from 'react-router';
 import './ViewMail.css';
 
 function ViewMail() {
-    const [email, setEmail] = useState<Email>();
-    const params = useParams<{ id: string }>();
+    const [email, setEmail] = useState<Email>(); // State to hold our email
+    const params = useParams<{ id: string }>(); // Get the URL parameters which here is the id of our email
 
     useIonViewWillEnter(() => {
         const email = getEmail(parseInt(params.id, 10));
         setEmail(email);
-    });
+    }); // This hook will run when the component is mounted
 
     return (
         <IonPage id="view-message-page">
@@ -36,6 +36,7 @@ function ViewMail() {
                 </IonToolbar>
             </IonHeader>
 
+            {/* if email is found, display the email, else display a message */}
             <IonContent fullscreen>
                 {email ? (
                     <>
