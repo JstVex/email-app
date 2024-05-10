@@ -32,12 +32,12 @@ const EmailList: React.FC<EmailListProps> = ({ email, handleDelete, handleArchiv
             </IonItemOptions>
             <IonItem routerLink={`/mail/${email.id}`} detail={false}>
                 <IonIcon slot="start" icon={personCircle} className='ion-padding-start' />
-                <IonLabel className="ion-text-wrap">
+                <IonLabel className="ion-text-wrap email-text" >
                     <h2>
                         {email.from}
                     </h2>
                     <h3>{email.subject}</h3>
-                    <p>
+                    <p >
                         {email.message}
                     </p>
                 </IonLabel>

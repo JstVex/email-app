@@ -53,3 +53,11 @@ ion-footer ion-title {
   font-size: 11px;
   font-weight: normal;
 }
+
+.email-text {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  display: block;
+  max-width: 100%;
+}
