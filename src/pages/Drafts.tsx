@@ -7,9 +7,9 @@ const Drafts: React.FC = () => {
     const [emails, setEmails] = useState<Email[]>([]);
 
     useIonViewWillEnter(() => {
-        const mails = getEmails();
+        const mails = getEmails().filter(email => email.draft);
         setEmails(mails);
-    });
+    }); // This hook will run when the component is mounted
 
     const handleDelete = (emailId: number) => {
         console.log('Deleting email with ID:', emailId);
@@ -17,6 +17,14 @@ const Drafts: React.FC = () => {
 
     const handleArchive = (emailId: number) => {
         console.log('Archiving email with ID:', emailId);
+    };
+
+    const handleToggleStar = (id: number) => {
+        setEmails(currentEmails =>
+            currentEmails.map(email =>
+                email.id === id ? { ...email, starred: !email.starred } : email
+            )
+        );
     };
 
     return (
@@ -32,7 +40,7 @@ const Drafts: React.FC = () => {
 
             <IonContent>
                 <IonList lines='full' className='ion-no-padding'>
-                    {emails.map(email => <EmailList key={email.id} email={email} handleDelete={handleDelete} handleArchive={handleArchive} />)}
+                    {emails.map(email => <EmailList key={email.id} email={email} handleDelete={handleDelete} handleArchive={handleArchive} handleToggleStar={handleToggleStar} />)}
                 </IonList>
             </IonContent>
         </IonPage>

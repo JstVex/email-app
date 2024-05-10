@@ -7,16 +7,29 @@ import {
     IonLabel,
 } from '@ionic/react';
 import { Email } from '../data/emails';
-import { archive, personCircle, trash } from 'ionicons/icons';
+import { archive, personCircle, star, starOutline, trash } from 'ionicons/icons';
 import './EmailList.css';
 
 interface EmailListProps {
     email: Email;
     handleDelete: (id: number) => void;
     handleArchive: (id: number) => void;
+    handleToggleStar: (id: number) => void;
 }
 
-const EmailList: React.FC<EmailListProps> = ({ email, handleDelete, handleArchive }) => {
+const EmailList: React.FC<EmailListProps> = ({ email, handleDelete, handleArchive, handleToggleStar }) => {
+
+    // Function to display the email's sender or recipient
+    const getEmailDisplay = (email: Email) => {
+        if (email.draft) {
+            return <h2 style={{ color: 'red' }}>Draft</h2>;
+        } else if (email.sent) {
+            return <h2>To: {email.to}</h2>;
+        } else {
+            return <h2>{email.from}</h2>;
+        }
+    };
+
     return (
         <IonItemSliding key={email.id}>
             <IonItemOptions side="end">
@@ -32,10 +45,18 @@ const EmailList: React.FC<EmailListProps> = ({ email, handleDelete, handleArchiv
             </IonItemOptions>
             <IonItem routerLink={`/mail/${email.id}`} detail={false}>
                 <IonIcon slot="start" icon={personCircle} className='ion-padding-start' />
+                <IonIcon
+                    slot="end"
+                    icon={email.starred ? star : starOutline}
+                    size='small'
+                    style={{ color: email.starred ? 'gold' : 'gray' }}
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        handleToggleStar(email.id);
+                    }}
+                />
                 <IonLabel className="ion-text-wrap email-text" >
-                    <h2>
-                        {email.from}
-                    </h2>
+                    {getEmailDisplay(email)}
                     <h3>{email.subject}</h3>
                     <p >
                         {email.message}

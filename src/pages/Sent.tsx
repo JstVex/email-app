@@ -7,7 +7,7 @@ const Sent: React.FC = () => {
     const [emails, setEmails] = useState<Email[]>([]);
 
     useIonViewWillEnter(() => {
-        const mails = getEmails();
+        const mails = getEmails().filter(email => email.sent);
         setEmails(mails);
     });
 
@@ -18,6 +18,14 @@ const Sent: React.FC = () => {
     const handleArchive = (emailId: number) => {
         console.log('Archiving email with ID:', emailId);
     };
+
+    const handleToggleStar = (id: number) => {
+        setEmails(currentEmails =>
+            currentEmails.map(email =>
+                email.id === id ? { ...email, starred: !email.starred } : email
+            )
+        );
+    }
 
     return (
         <IonPage>
@@ -32,7 +40,7 @@ const Sent: React.FC = () => {
 
             <IonContent>
                 <IonList lines='full' className='ion-no-padding'>
-                    {emails.map(email => <EmailList key={email.id} email={email} handleDelete={handleDelete} handleArchive={handleArchive} />)}
+                    {emails.map(email => <EmailList key={email.id} email={email} handleDelete={handleDelete} handleArchive={handleArchive} handleToggleStar={handleToggleStar} />)}
                 </IonList>
             </IonContent>
         </IonPage>

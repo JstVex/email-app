@@ -28,7 +28,7 @@ const Inbox: React.FC = () => {
     const [showSearch, setShowSearch] = useState(false); // State to toggle the search bar
 
     useIonViewWillEnter(() => {
-        const mails = getEmails();
+        const mails = getEmails().filter(email => !email.draft && !email.sent && !email.trash);
         setAllEmails(mails);
         setEmails(mails);
     }); // This hook will run when the component is mounted
@@ -69,6 +69,14 @@ const Inbox: React.FC = () => {
 
     const handleArchive = (emailId: number) => {
         console.log('Archiving email with ID:', emailId);
+    };
+
+    const handleToggleStar = (id: number) => {
+        setEmails(currentEmails =>
+            currentEmails.map(email =>
+                email.id === id ? { ...email, starred: !email.starred } : email
+            )
+        );
     };
 
     return (
@@ -119,7 +127,7 @@ const Inbox: React.FC = () => {
 
                 {/* Our list of emails ( each email is an EmailList component  */}
                 <IonList lines='full' className='ion-no-padding'>
-                    {emails.map(email => <EmailList key={email.id} email={email} handleDelete={handleDelete} handleArchive={handleArchive} />)}
+                    {emails.map(email => <EmailList key={email.id} email={email} handleDelete={handleDelete} handleArchive={handleArchive} handleToggleStar={handleToggleStar} />)}
                 </IonList>
 
                 <NewEmailButton onClick={handleCreateEmail} />
