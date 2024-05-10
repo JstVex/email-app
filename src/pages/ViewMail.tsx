@@ -29,7 +29,7 @@ function ViewMail() {
     return (
         <IonPage id="view-message-page">
             <IonHeader translucent>
-                <IonToolbar>
+                <IonToolbar color='danger'>
                     <IonButtons slot="start">
                         <IonBackButton text="Inbox" defaultHref="/home"></IonBackButton>
                     </IonButtons>

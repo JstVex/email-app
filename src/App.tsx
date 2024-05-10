@@ -41,7 +41,7 @@ const App: React.FC = () => (
   <IonApp>
     {/* This is the Ionic React Router component that wraps the entire app */}
     <IonReactRouter>
-      <IonSplitPane contentId="main">
+      <IonSplitPane contentId="main" when={false}>
         <Menu />
         <IonRouterOutlet id='main'>
           <Route path="/" exact={true}>
