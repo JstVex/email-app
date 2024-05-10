@@ -63,6 +63,14 @@ const Inbox: React.FC = () => {
         console.log('Create new email');
     };
 
+    const handleDelete = (emailId: number) => {
+        console.log('Deleting email with ID:', emailId);
+    };
+
+    const handleArchive = (emailId: number) => {
+        console.log('Archiving email with ID:', emailId);
+    };
+
     return (
         <IonPage id="main">
             <IonHeader>
@@ -79,7 +87,6 @@ const Inbox: React.FC = () => {
                                 value={searchText}
                                 onIonChange={(e) => setSearchText(e.detail.value!)}
                                 placeholder="Search emails"
-                                showCancelButton="focus"
                             />
                         </>
                     ) : (
@@ -111,8 +118,8 @@ const Inbox: React.FC = () => {
                 </IonHeader>
 
                 {/* Our list of emails ( each email is an EmailList component  */}
-                <IonList>
-                    {emails.map(email => <EmailList key={email.id} email={email} />)}
+                <IonList lines='full' className='ion-no-padding'>
+                    {emails.map(email => <EmailList key={email.id} email={email} handleDelete={handleDelete} handleArchive={handleArchive} />)}
                 </IonList>
 
                 <NewEmailButton onClick={handleCreateEmail} />
