@@ -34,6 +34,10 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 import Menu from './components/Menu';
+import Starred from './pages/Starred';
+import Sent from './pages/Sent';
+import Drafts from './pages/Drafts';
+import Trash from './pages/Trash';
 
 setupIonicReact();
 
@@ -54,6 +58,22 @@ const App: React.FC = () => (
           <Route path="/mail/:id">
             {/* Mail page to view a single email */}
             <ViewMail />
+          </Route>
+          <Route path="/starred" exact={true}>
+            {/* Starred page to view all starred emails */}
+            <Starred />
+          </Route>
+          <Route path="/sent" exact={true}>
+            {/* Sent page to view all sent emails */}
+            <Sent />
+          </Route>
+          <Route path="/drafts" exact={true}>
+            {/* Drafts page to view all draft emails */}
+            <Drafts />
+          </Route>
+          <Route path="/trash" exact={true}>
+            {/* Trash page to view all deleted emails */}
+            <Trash />
           </Route>
         </IonRouterOutlet>
       </IonSplitPane>

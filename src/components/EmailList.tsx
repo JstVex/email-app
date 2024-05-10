@@ -16,7 +16,7 @@ interface EmailListProps {
     handleArchive: (id: number) => void;
 }
 
-const MessageListItem: React.FC<EmailListProps> = ({ email, handleDelete, handleArchive }) => {
+const EmailList: React.FC<EmailListProps> = ({ email, handleDelete, handleArchive }) => {
     return (
         <IonItemSliding key={email.id}>
             <IonItemOptions side="end">
@@ -46,4 +46,4 @@ const MessageListItem: React.FC<EmailListProps> = ({ email, handleDelete, handle
     );
 };
 
-export default MessageListItem;
+export default EmailList;
