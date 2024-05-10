@@ -7,6 +7,7 @@ import {
     IonHeader,
     IonIcon,
     IonList,
+    IonMenuButton,
     IonPage,
     IonRefresher,
     IonRefresherContent,
@@ -18,6 +19,7 @@ import {
 import EmailList from '../components/EmailList';
 import './Inbox.css';
 import { arrowBack, searchOutline } from 'ionicons/icons';
+import NewEmailButton from '../components/NewEmailButton';
 
 const Inbox: React.FC = () => {
     const [emails, setEmails] = useState<Email[]>([]); // State to hold our emails
@@ -57,10 +59,14 @@ const Inbox: React.FC = () => {
         }
     }; // This function will toggle the search bar
 
+    const handleCreateEmail = () => {
+        console.log('Create new email');
+    };
+
     return (
-        <IonPage id="home-page">
+        <IonPage id="main">
             <IonHeader>
-                <IonToolbar>
+                <IonToolbar color={'danger'}>
                     {/*if showSearch is true, show the search bar, else show title and icon to toggle search*/}
                     {showSearch ? (
                         <>
@@ -78,6 +84,9 @@ const Inbox: React.FC = () => {
                         </>
                     ) : (
                         <>
+                            <IonButtons slot="start">
+                                <IonMenuButton></IonMenuButton>
+                            </IonButtons>
                             <IonTitle>Inbox</IonTitle>
                             <IonButtons slot="end">
                                 <IonButton onClick={handleSearchToggle}>
@@ -105,6 +114,8 @@ const Inbox: React.FC = () => {
                 <IonList>
                     {emails.map(email => <EmailList key={email.id} email={email} />)}
                 </IonList>
+
+                <NewEmailButton onClick={handleCreateEmail} />
             </IonContent>
         </IonPage>
     );
