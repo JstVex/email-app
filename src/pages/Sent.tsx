@@ -11,22 +11,6 @@ const Sent: React.FC = () => {
         setEmails(mails);
     });
 
-    const handleDelete = (emailId: number) => {
-        console.log('Deleting email with ID:', emailId);
-    };
-
-    const handleArchive = (emailId: number) => {
-        console.log('Archiving email with ID:', emailId);
-    };
-
-    const handleToggleStar = (id: number) => {
-        setEmails(currentEmails =>
-            currentEmails.map(email =>
-                email.id === id ? { ...email, starred: !email.starred } : email
-            )
-        );
-    }
-
     return (
         <IonPage>
             <IonHeader>
@@ -40,7 +24,7 @@ const Sent: React.FC = () => {
 
             <IonContent>
                 <IonList lines='full' className='ion-no-padding'>
-                    {emails.map(email => <EmailList key={email.id} email={email} handleDelete={handleDelete} handleArchive={handleArchive} handleToggleStar={handleToggleStar} />)}
+                    {emails.map(email => <EmailList key={email.id} email={email} />)}
                 </IonList>
             </IonContent>
         </IonPage>

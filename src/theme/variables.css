@@ -9,3 +9,8 @@ ion-searchbar {
     max-width: 600px;
     margin-left: auto;
 }
+
+ion-avatar {
+  --ion-avatar-width: 10px;
+  --ion-avatar-height: 10px;
+}
