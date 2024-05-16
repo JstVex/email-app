@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react';
 import { Email, getEmails } from '../data/emails';
 import {
+    IonAvatar,
     IonButton,
     IonButtons,
     IonContent,
     IonHeader,
     IonIcon,
+    IonImg,
     IonList,
-    IonMenuButton,
+    IonMenuToggle,
     IonPage,
     IonRefresher,
     IonRefresherContent,
@@ -19,7 +21,6 @@ import {
 import EmailList from '../components/EmailList';
 import './Inbox.css';
 import { arrowBack, searchOutline } from 'ionicons/icons';
-import NewEmailButton from '../components/NewEmailButton';
 
 const Inbox: React.FC = () => {
     const [emails, setEmails] = useState<Email[]>([]); // State to hold our emails
@@ -59,26 +60,6 @@ const Inbox: React.FC = () => {
         }
     }; // This function will toggle the search bar
 
-    const handleCreateEmail = () => {
-        console.log('Create new email');
-    };
-
-    const handleDelete = (emailId: number) => {
-        console.log('Deleting email with ID:', emailId);
-    };
-
-    const handleArchive = (emailId: number) => {
-        console.log('Archiving email with ID:', emailId);
-    };
-
-    const handleToggleStar = (id: number) => {
-        setEmails(currentEmails =>
-            currentEmails.map(email =>
-                email.id === id ? { ...email, starred: !email.starred } : email
-            )
-        );
-    };
-
     return (
         <IonPage id="main">
             <IonHeader>
@@ -99,14 +80,16 @@ const Inbox: React.FC = () => {
                         </>
                     ) : (
                         <>
-                            <IonButtons slot="start">
-                                <IonMenuButton></IonMenuButton>
-                            </IonButtons>
                             <IonTitle>Inbox</IonTitle>
                             <IonButtons slot="end">
                                 <IonButton onClick={handleSearchToggle}>
                                     <IonIcon icon={searchOutline} />
                                 </IonButton>
+                                <IonMenuToggle>
+                                    <IonAvatar style={{ cursor: 'pointer', width: '35px', height: '35px', border: '1.5px solid white' }} className='ion-margin-end'>
+                                        <IonImg src="./D_pfp.png" />
+                                    </IonAvatar>
+                                </IonMenuToggle>
                             </IonButtons>
                         </>
                     )}
@@ -127,10 +110,8 @@ const Inbox: React.FC = () => {
 
                 {/* Our list of emails ( each email is an EmailList component  */}
                 <IonList lines='full' className='ion-no-padding'>
-                    {emails.map(email => <EmailList key={email.id} email={email} handleDelete={handleDelete} handleArchive={handleArchive} handleToggleStar={handleToggleStar} />)}
+                    {emails.map(email => <EmailList key={email.id} email={email} />)}
                 </IonList>
-
-                <NewEmailButton onClick={handleCreateEmail} />
             </IonContent>
         </IonPage>
     );
