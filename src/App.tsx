@@ -1,8 +1,9 @@
 import { Redirect, Route } from 'react-router-dom';
-import { IonApp, IonRouterOutlet, IonSplitPane, setupIonicReact } from '@ionic/react';
+import { IonApp, IonIcon, IonRouterOutlet, IonSplitPane, IonTabBar, IonTabButton, IonTabs, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import Inbox from './pages/Inbox';
 import ViewMail from './pages/ViewMail';
+import { home, mail, notifications, person, easel } from 'ionicons/icons';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -34,31 +35,48 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 import Menu from './components/Menu';
+import Canvas from './pages/Canvas';
 
 setupIonicReact();
 
 const App: React.FC = () => (
   <IonApp>
-    {/* This is the Ionic React Router component that wraps the entire app */}
     <IonReactRouter>
-      <IonSplitPane contentId="main" when={false}>
+      <IonSplitPane contentId="main" when="false">
         <Menu />
-        <IonRouterOutlet id='main'>
-          <Route path="/" exact={true}>
-            <Redirect to="/inbox" />
-          </Route>
-          <Route path="/home" exact={true}>
-            <Redirect to="/inbox" />
-          </Route>
-          <Route path="/inbox" exact={true}>
-            {/* Inbox page to view all emails */}
-            <Inbox />
-          </Route>
-          <Route path="/mail/:id">
-            {/* Mail page to view a single email */}
-            <ViewMail />
-          </Route>
-        </IonRouterOutlet>
+        <IonTabs>
+          <IonRouterOutlet id="main">
+            <Route path="/" exact={true}>
+              <Redirect to="/inbox" />
+            </Route>
+            <Route path="/inbox" exact={true}>
+              <Inbox />
+            </Route>
+            <Route path="/mail/:id">
+              <ViewMail />
+            </Route>
+            <Route path="/canvas" component={Canvas} />
+          </IonRouterOutlet>
+
+          <IonTabBar slot="bottom" color='danger'>
+            <IonTabButton tab="inbox" href="/inbox">
+              <IonIcon icon={mail} />
+            </IonTabButton>
+            <IonTabButton tab="canvas" href="/canvas">
+              <IonIcon icon={easel} />
+            </IonTabButton>
+            <IonTabButton tab="home" href="/home">
+              <IonIcon icon={home} />
+            </IonTabButton>
+            <IonTabButton tab="notifications" href="/notifications">
+              <IonIcon icon={notifications} />
+            </IonTabButton>
+            <IonTabButton tab="profile" href="/profile">
+              <IonIcon icon={person} />
+            </IonTabButton>
+          </IonTabBar>
+        </IonTabs>
+
       </IonSplitPane>
     </IonReactRouter>
   </IonApp>
