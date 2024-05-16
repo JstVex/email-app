@@ -1,35 +1,66 @@
 import {
-    IonContent,
-    IonIcon,
     IonItem,
     IonItemSliding,
     IonLabel
 } from '@ionic/react';
 import { Canvas } from '../../data/canvas';
-import { chevronForwardOutline, personCircle } from 'ionicons/icons';
 import './AssignmentList.css';
+import { format, isToday, isTomorrow, parseISO } from 'date-fns';
 
+function formatDueDate(dueDateString: string): string {
+    const dueDate = parseISO(dueDateString);
+    const timeString = format(dueDate, 'h:mm a');
+
+    if (isToday(dueDate)) {
+        return `Due Today at ${timeString}`;
+    } else if (isTomorrow(dueDate)) {
+        return `Due Tomorrow at ${timeString}`;
+    } else {
+        return `${format(dueDate, 'd MMM')} at ${timeString}`;
+    }
+}
+
+type CourseKey = 'MATH' | 'CS' | 'ENGL';
+type CourseColor = 'orange' | 'green' | 'purple' | 'gray';
+
+const courseColors: Record<CourseKey, CourseColor> = {
+    MATH: 'orange',
+    CS: 'green',
+    ENGL: 'purple'
+};
+
+function getColorForCourse(courseName: string): CourseColor {
+    const keys = Object.keys(courseColors) as CourseKey[];
+    for (const key of keys) {
+        if (courseName.includes(key)) {
+            return courseColors[key];
+        }
+    }
+    return 'gray';
+}
 
 interface AssignmentListProps {
     assignment: Canvas;
 }
 
 const AssignmentList: React.FC<AssignmentListProps> = ({ assignment }) => {
+    const color = getColorForCourse(assignment.course);
+    const dueDateFormatted = formatDueDate(assignment.dueDate);
+
     return (
         <IonItemSliding key={assignment.id}>
             <IonItem routerLink={`/assignment/${assignment.id}`} detail={false}>
-                <IonIcon
-                    slot="end"
-                    icon={chevronForwardOutline}
-                    size='small'
-                    style={{ color: 'black' }}
-                />
-                <IonLabel className="ion-text-wrap" >
-                    <h2>{assignment.course}</h2>
-                    <h3>{assignment.title}</h3>
+                <IonLabel className="ion-text-wrap ion-padding-horizontal" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                    <div>
+                        <h2 style={{ color: color, fontWeight: 500 }}>{assignment.course}</h2>
+                        <h3>{assignment.title}</h3>
+                    </div>
+                    <div style={{ alignSelf: 'flex-end', marginTop: 'auto' }}>
+                        <p>{dueDateFormatted}</p>
+                    </div>
                 </IonLabel>
             </IonItem>
-        </IonItemSliding>
+        </IonItemSliding >
 
     );
 };
