@@ -29,7 +29,7 @@ const Inbox: React.FC = () => {
     const [showSearch, setShowSearch] = useState(false); // State to toggle the search bar
 
     useIonViewWillEnter(() => {
-        const mails = getEmails().filter(email => !email.draft && !email.sent && !email.trash);
+        const mails = getEmails();
         setAllEmails(mails);
         setEmails(mails);
     }); // This hook will run when the component is mounted
