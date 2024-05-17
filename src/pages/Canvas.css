@@ -1,0 +1,13 @@
+.modal-style {
+    --height: auto;
+    --max-height: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 20px;
+}
+
+.modal-content {
+    overflow-y: auto;
+    padding: 20px;
+}
