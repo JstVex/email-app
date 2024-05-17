@@ -20,30 +20,12 @@ function formatDueDate(dueDateString: string): string {
     }
 }
 
-type CourseKey = 'MATH' | 'CS' | 'ENGL';
-type CourseColor = 'orange' | 'green' | 'purple' | 'gray';
-
-const courseColors: Record<CourseKey, CourseColor> = {
-    MATH: 'orange',
-    CS: 'green',
-    ENGL: 'purple'
-};
-
-function getColorForCourse(courseName: string): CourseColor {
-    const keys = Object.keys(courseColors) as CourseKey[];
-    for (const key of keys) {
-        if (courseName.includes(key)) {
-            return courseColors[key];
-        }
-    }
-    return 'gray';
-}
-
 interface AssignmentListProps {
     assignment: Canvas;
+    getColorForCourse: (courseName: string) => string;
 }
 
-const AssignmentList: React.FC<AssignmentListProps> = ({ assignment }) => {
+const AssignmentList: React.FC<AssignmentListProps> = ({ assignment, getColorForCourse }) => {
     const color = getColorForCourse(assignment.course);
     const dueDateFormatted = formatDueDate(assignment.dueDate);
 
