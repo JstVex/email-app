@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { IonAvatar, IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonImg, IonItem, IonLabel, IonList, IonMenuToggle, IonModal, IonPage, IonRefresher, IonRefresherContent, IonTitle, IonToolbar, useIonViewWillEnter } from "@ionic/react";
-import { calendarOutline, chevronDownOutline } from "ionicons/icons";
+import { IonAvatar, IonButton, IonButtons, IonContent, IonDatetime, IonHeader, IonIcon, IonImg, IonItem, IonLabel, IonList, IonMenuToggle, IonModal, IonPage, IonRefresher, IonRefresherContent, IonTitle, IonToolbar, useIonViewWillEnter } from "@ionic/react";
+import { calendarOutline, chevronDownOutline, toggle } from "ionicons/icons";
 import { Canvas, getAssigments } from "../data/canvas";
 import AssignmentList from "../components/canvas/AssignmentList";
 import './Canvas.css';
@@ -10,26 +10,30 @@ const CanvasPage: React.FC = () => {
     const [assignments, setAssignments] = useState<Canvas[]>([]);
     const [selectedCourse, setSelectedCourse] = useState<string>('All Courses');
     const [showFilter, setShowFilter] = useState(false);
+    const [showCalendar, setShowCalendar] = useState(false);
+    const [selectedDate, setSelectedDate] = useState<string | string[]>('');
 
     useIonViewWillEnter(() => {
         const assignments_fetch = getAssigments();
         setAssignments(assignments_fetch);
     });
 
-    const courses = ['All Courses', ...new Set(assignments.map(a => a.course))];
-    const filteredAssignments = selectedCourse === 'All Courses' ? assignments : assignments.filter(a => a.course === selectedCourse);
-
-    const toggleCourses = () => setShowFilter(!showFilter);
-
-    const selectCourse = (course: string) => {
-        setSelectedCourse(course);
-        setShowFilter(false);
-    };
-
     const refresh = (e: CustomEvent) => {
         setTimeout(() => {
             e.detail.complete();
         }, 3000);
+    };
+
+    const courses = ['All Courses', ...new Set(assignments.map(a => a.course))];
+    const filteredAssignments = selectedCourse === 'All Courses' ? assignments : assignments.filter(a => a.course === selectedCourse);
+
+    const toggleCourses = () => {
+        setShowFilter(!showFilter);
+    }
+
+    const selectCourse = (course: string) => {
+        setSelectedCourse(course);
+        setShowFilter(false);
     };
 
     type CourseKey = 'MATH' | 'CS' | 'ENGL';
@@ -40,6 +44,15 @@ const CanvasPage: React.FC = () => {
         CS: 'green',
         ENGL: 'purple'
     };
+
+    const toggleCalendar = () => {
+        setShowCalendar(!showCalendar);
+    }
+
+    const handleDateChange = (value: string | string[]) => {
+        setSelectedDate(value);
+    };
+
 
     function getColorForCourse(courseName: string): CourseColor {
         const keys = Object.keys(courseColors) as CourseKey[];
@@ -57,7 +70,7 @@ const CanvasPage: React.FC = () => {
                 <IonToolbar color='danger'>
                     <IonTitle>Canvas</IonTitle>
                     <IonButtons slot="end">
-                        <IonButton>
+                        <IonButton onClick={toggleCalendar}>
                             <IonIcon icon={calendarOutline} />
                         </IonButton>
                         <IonMenuToggle>
@@ -74,38 +87,37 @@ const CanvasPage: React.FC = () => {
                     <IonRefresherContent></IonRefresherContent>
                 </IonRefresher>
 
-                {/* <IonList className="ion-padding">
-                    <IonButton color='light' onClick={toggleCourses}>
-                        {selectedCourse} <IonIcon icon={chevronDownOutline} />
-                    </IonButton>
-                    {showFilter && (
-                        <IonList>
-                            {courses.map((course, index) => (
-                                <IonItem key={index} button onClick={() => selectCourse(course)}>
-                                    <IonLabel style={{ color: getColorForCourse(course) }}>{course}</IonLabel>
-                                </IonItem>
-                            ))}
-                        </IonList>
-                    )}
-                </IonList> */}
+                {showCalendar ? (
+                    <div className="center-calendar">
+                        <IonDatetime
+                            presentation="date"
+                            value={selectedDate}
+                            onIonChange={e => handleDateChange(e.detail.value!)}
+                        />
+                    </div>
+                ) : (
+                    <>
+                        <IonModal isOpen={showFilter} onDidDismiss={() => setShowFilter(false)} className="modal-style">
+                            <IonList className="modal-content">
+                                {courses.map((course, index) => (
+                                    <IonItem key={index} button onClick={() => selectCourse(course)}>
+                                        <IonLabel style={{ color: getColorForCourse(course), fontWeight: 500 }}>{course}</IonLabel>
+                                    </IonItem>
+                                ))}
+                            </IonList>
+                        </IonModal>
 
-                <IonModal isOpen={showFilter} onDidDismiss={() => setShowFilter(false)} className="modal-style">
-                    <IonList className="modal-content">
-                        {courses.map((course, index) => (
-                            <IonItem key={index} button onClick={() => selectCourse(course)}>
-                                <IonLabel style={{ color: getColorForCourse(course), fontWeight: 500 }}>{course}</IonLabel>
-                            </IonItem>
-                        ))}
-                    </IonList>
-                </IonModal>
+                        <IonButton color='light' expand="block" onClick={toggleCourses} style={{ fontWeight: '600' }}>
+                            {selectedCourse} <IonIcon icon={chevronDownOutline} className="ion-padding-start" />
+                        </IonButton>
 
-                <IonButton color='light' expand="block" onClick={toggleCourses} style={{ fontWeight: '600' }}>
-                    {selectedCourse} <IonIcon icon={chevronDownOutline} className="ion-padding-start" />
-                </IonButton>
+                        <IonList lines='full' className='ion-no-padding'>
+                            {filteredAssignments.map(assignment => <AssignmentList key={assignment.id} assignment={assignment} getColorForCourse={getColorForCourse} />)}
+                        </IonList></>
+                )}
 
-                <IonList lines='full' className='ion-no-padding'>
-                    {filteredAssignments.map(assignment => <AssignmentList key={assignment.id} assignment={assignment} getColorForCourse={getColorForCourse} />)}
-                </IonList>
+
+
             </IonContent>
         </IonPage >
     );
